@@ -1,12 +1,10 @@
 // ==UserScript==
 // @name         My Courses Time
 // @namespace    http://tampermonkey.net/
-// @version      11-10-2020
-// @description  مواعيد صفوف موادي
+// @version      26-12-2022
+// @description  My Courses Time
 // @author       Mohammad Hammad
 // @match        https://svuis.svuonline.org/SVUIS/course_time_tutor.php
-// @updateURL    https://github.com/*
-// @downloadURL  https://github.com/MohammadHammad96/SVUIS/blob/main/My%20Courses%20Time.js
 // ==/UserScript==
 
 (function () {
@@ -60,7 +58,9 @@
       return temp;
     }
   }
-  document.getElementById("TableResult").parentNode.setAttribute("id", "Course_Section");
+  document
+    .getElementById("TableResult")
+    .parentNode.setAttribute("id", "Course_Section");
   $("#Course_Section").html("");
   var boots =
     "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' ";
@@ -69,17 +69,10 @@
   $("head").append(boots);
   var courses = [],
     new_courses = [];
-  var SelectedProgram = 32 /* BAIT */,
+  var SelectedProgram = 23 /* MWS */,
     SelectedCourse = [
-      717,
-      718,
-      724,
-      727,
-      735,
-      792,
-      793,
-      794
-    ] /* GHS101 - GHS102 - BMN202 - BAC101 - BFB305 - INT203 - INT204 - INT202 */,
+      403, 404, 405, 406, 407,
+    ] /* GMA101 - GMA204 - GMA205 - IPI405,*/,
     ENGProgram = 7 /* ENG */,
     L5 = 236; /* L5 */
   function GetCourseResultSS(Prog, Course, Term) {
@@ -124,7 +117,8 @@
               .eq(i)
               .find("td")
               .eq(3)
-              .text().replace(/\s/g, '');
+              .text()
+              .replace(/\s/g, "");
             var font = $("#TableResult", html)
               .find("tr")
               .eq(i)
@@ -181,7 +175,7 @@
     });
   }
   for (var i = 0; i < SelectedCourse.length; i++) {
-    GetCourseResultSS(SelectedProgram, SelectedCourse[i], 39);
+    GetCourseResultSS(SelectedProgram, SelectedCourse[i], 42 /* termId */);
   }
   var arr = [],
     arr_new = [];
@@ -227,7 +221,8 @@
               .eq(i)
               .find("td")
               .eq(3)
-              .text().replace(/\s/g, '');
+              .text()
+              .replace(/\s/g, "");
             var font = $("#TableResult", html)
               .find("tr")
               .eq(i)
@@ -289,7 +284,7 @@
       },
     });
   }
-  //GetCourseResultENG(ENGProgram, L5, 38);
+  //GetCourseResultENG(ENGProgram, L5, 40);
   var todays = [
     "السبت",
     "الأحد",
@@ -343,15 +338,15 @@
       }
     }
   }
-    for(i = 0; i < courses_days.length; i++) {
-        for(j = 0; j < courses_days[i].length - 1; j++) {
-            if(courses_days[i][j].Class == courses_days[i][j+1].Class) {
-                courses_days[i][j].Name2 = courses_days[i][j+1].Name;
-                courses_days[i][j].Mail2 = courses_days[i][j+1].Mail;
-                courses_days[i].splice(j+1, 1);
-            }
-        }
+  for (i = 0; i < courses_days.length; i++) {
+    for (j = 0; j < courses_days[i].length - 1; j++) {
+      if (courses_days[i][j].Class == courses_days[i][j + 1].Class) {
+        courses_days[i][j].Name2 = courses_days[i][j + 1].Name;
+        courses_days[i][j].Mail2 = courses_days[i][j + 1].Mail;
+        courses_days[i].splice(j + 1, 1);
+      }
     }
+  }
   var xs = "<div class='container'>";
   for (i = 0; i < courses_days.length; i++) {
     if (courses_days[i].length > 0) {
@@ -412,10 +407,11 @@
   }
   xs += "</div>";
   xs +=
-    "<style>.row{direction:rtl;text-align:center; height:35px; margin-bottom:15px;} .row > div{border: solid 0.5px #F7D; padding: 0px; border-radius:8px;} .row > div > span{display: inline-block;padding-top: 5px;line-height:17px;} #Program_Data  p{float:right; padding-left:5px;} .row > p{text-align:center; font-size:18px; width:100%;} #Program_Data a:hover{color:blue;} .sps{cursor: no-drop;}</style>";
-  xs += "<button type='button' id='reset' style='position:fixed;top:3%;left:83.5%;width:12%;cursor:pointer;' class='form-control'>Reset</button>";
-    xs +=
-    "<form id='Program_Data' class='form-control' style='display:none;position:fixed;top:10%;left:79.5%;width:20%;direction:rtl;'><button type='button' class='close' style='float:left;' aria-label='Close'><span aria-hidden='true'>&times;</span></button><br/><div id='class'></div><hr><div id='time'></div><hr><div id='time-ram'></div><hr><div id='tutor'></div><hr><div id='mail'></div><hr><div id='qty'></div></form>";
+    "<style>.eliminate { display: none !important;} .row{direction:rtl;text-align:center; height:35px; margin-bottom:15px;} .row > div{border: solid 0.5px #F7D; padding: 0px; border-radius:8px;} .row > div > span{display: inline-block;padding-top: 5px;line-height:17px;} #Program_Data  p{float:right; padding-left:5px;} .row > p{text-align:center; font-size:18px; width:100%;} #Program_Data a:hover{color:blue;} .sps{cursor: no-drop;}</style>";
+  xs +=
+    "<button type='button' id='reset' style='position:fixed;top:3%;left:83.5%;width:12%;cursor:pointer;' class='form-control'>Reset</button>";
+  xs +=
+    "<form id='Program_Data' class='form-control' style='display:none;position:fixed;top:10%;left:79.5%;width:20%;direction:rtl;'><button type='button' class='close' style='float:left;' aria-label='Close'><span aria-hidden='true'>&times;</span></button><br/><div id='class'></div><hr><div id='time'></div><hr><div id='tutor'></div><hr><div id='mail'></div><hr><div id='qty'></div></form>";
   document.getElementById("Course_Section").innerHTML = xs;
   $("#TableResult").css("direction", "rtl");
   $("#TableResult").css("width", "100%");
@@ -423,32 +419,36 @@
     function () {
       $("#class").html("<p>الصف: </p>" + $(this).attr("data-class"));
       $("#time").html("<p>التوقيت: </p>" + $(this).attr("data-time"));
-      $("#time-ram").html(
+      /*$("#time-ram").html(
         "<p>توقيت شهر رمضان: </p>" + $(this).attr("data-time-ram")
-      );
-      if($(this).attr("data-tutor2") == "undefined") {
-          $("#tutor").html("<p>المدرس: </p>" + $(this).attr("data-tutor"));
-          $("#mail").html(
-              "<p>البريد الإلكتروني: </p><a href='mailto:" +
-              $(this).attr("data-mail") +
-              "'>" +
-              $(this).attr("data-mail") +
-              "</a>"
-          );
-      }
-      else {
-          $("#tutor").html("<p>المدرسين: </p>" + $(this).attr("data-tutor") + "<br/>" + $(this).attr("data-tutor2"));
-          $("#mail").html(
-              "<p>البريد الإلكتروني: </p><a href='mailto:" +
-              $(this).attr("data-mail") +
-              "'>" +
-              $(this).attr("data-mail") +
-              "</a><br/><a href='mailto:" +
-              $(this).attr("data-mail2") +
-              "'>" +
-              $(this).attr("data-mail2") +
-              "</a>"
-          );
+      );*/
+      if ($(this).attr("data-tutor2") == "undefined") {
+        $("#tutor").html("<p>المدرس: </p>" + $(this).attr("data-tutor"));
+        $("#mail").html(
+          "<p>البريد الإلكتروني: </p><a href='mailto:" +
+            $(this).attr("data-mail") +
+            "'>" +
+            $(this).attr("data-mail") +
+            "</a>"
+        );
+      } else {
+        $("#tutor").html(
+          "<p>المدرسين: </p>" +
+            $(this).attr("data-tutor") +
+            "<br/>" +
+            $(this).attr("data-tutor2")
+        );
+        $("#mail").html(
+          "<p>البريد الإلكتروني: </p><a href='mailto:" +
+            $(this).attr("data-mail") +
+            "'>" +
+            $(this).attr("data-mail") +
+            "</a><br/><a href='mailto:" +
+            $(this).attr("data-mail2") +
+            "'>" +
+            $(this).attr("data-mail2") +
+            "</a>"
+        );
       }
       $("#qty").html("<p>نسبة التدريس: </p>" + $(this).attr("data-qty"));
       $("#Program_Data").show();
@@ -458,52 +458,30 @@
   $(".close").click(function () {
     $("#Program_Data").hide();
   });
-  $('#reset').click(function () {
-       document.getElementById("Course_Section").innerHTML = xs;
-      $(".sps").hover(
-    function () {
-      $("#class").html("<p>الصف: </p>" + $(this).attr("data-class"));
-      $("#time").html("<p>التوقيت: </p>" + $(this).attr("data-time"));
-      $("#time-ram").html(
-        "<p>توقيت شهر رمضان: </p>" + $(this).attr("data-time-ram")
-      );
-      $("#tutor").html("<p>المدرس: </p>" + $(this).attr("data-tutor"));
-      $("#mail").html(
-        "<p>البريد الإلكتروني: </p><a href='mailto:" +
-          $(this).attr("data-mail") +
-          "'>" +
-          $(this).attr("data-mail") +
-          "</a>"
-      );
-      $("#qty").html("<p>نسبة التدريس: </p>" + $(this).attr("data-qty"));
-      $("#Program_Data").show();
-    },
-    function () {}
-  );
-  $(".close").click(function () {
-    $("#Program_Data").hide();
-  });
-      $(".row .sps").click(function () {
-    var len = $(this).siblings().length - 1;
-    if(len == 0) {
-      $(this).parent().remove();
-      return;
-    }
-    $(this)
-      .siblings()
-      .not(".retype")
-      .css("flex", "0 0 " + (100 / 12) * parseFloat(10 / len) + "%");
-    $(this)
-      .siblings()
-      .not(".retype")
-      .css("max-width", (100 / 12) * parseFloat(10 / len) + "%");
-    $(this).remove();
-  });
+  $("#reset").click(function () {
+    $(".row").each(function (e) {
+      var sessionsLength = $(this).children(".sps").length;
+      $(this)
+        .children(".sps")
+        .each(function (e) {
+          $(this).css(
+            "flex",
+            "0 0 " + (100 / 12) * parseFloat(10 / sessionsLength) + "%"
+          );
+          $(this).css(
+            "max-width",
+            (100 / 12) * parseFloat(10 / sessionsLength) + "%"
+          );
+        });
+    });
+    $(".row").removeClass("eliminate");
+    $(".sps").removeClass("eliminate");
   });
   $(".row .sps").click(function () {
-    var len = $(this).siblings().length - 1;
-    if(len == 0) {
-      $(this).parent().remove();
+    $(this).addClass("eliminate");
+    var len = $(this).siblings(".sps").not(".eliminate").length;
+    if (len == 0) {
+      $(this).parent().addClass("eliminate");
       return;
     }
     $(this)
@@ -514,7 +492,6 @@
       .siblings()
       .not(".retype")
       .css("max-width", (100 / 12) * parseFloat(10 / len) + "%");
-    $(this).remove();
   });
   left_panel.style.display = "none";
   left_panel_hide.style.display = "";
